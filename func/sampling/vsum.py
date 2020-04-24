@@ -1,3 +1,4 @@
+#-*- coding:utf-8 -*-
 import gm_submodular
 import gm_submodular.example_objectives as ex
 from gm_submodular import leskovec_maximize
