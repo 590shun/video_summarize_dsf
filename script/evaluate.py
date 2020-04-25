@@ -1,3 +1,4 @@
+#-*- coding:utf-8 -*-
 from scipy.io import loadmat
 import numpy as np
 import json
