@@ -1,4 +1,6 @@
 #-*- coding:utf-8 -*-
+
+#モジュールのインポート#
 import sys
 import os
 import json
