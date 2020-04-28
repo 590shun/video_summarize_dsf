@@ -1,3 +1,6 @@
+#-*- coding:utf-8 -*-
+
+#モジュールのインポート#
 import numpy as np
 
 
