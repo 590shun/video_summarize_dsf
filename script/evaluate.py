@@ -1,4 +1,6 @@
 #-*- coding:utf-8 -*-
+
+#モジュールのインポート#
 from scipy.io import loadmat
 import numpy as np
 import json
