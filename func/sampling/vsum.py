@@ -74,7 +74,6 @@ class VSUM(gm_submoduler.DataElement):
         enc_x = model(x)
         
         return enc_x.data
-    
 
     def uniformity(S):
         #入力:S(getChrDistance()のデータ要素)#
