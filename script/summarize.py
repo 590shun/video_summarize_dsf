@@ -1,8 +1,7 @@
 #-*- coding:utf-8 -*-
 
 #モジュールのインポート#
-import sys
-import os
+import sys, os
 import json
 import numpy as np
 from scipy.io import savemat
@@ -24,52 +23,49 @@ if __name__ == '__main__':
     sys.path.append('./')
     from func.sampling.vsum import VSUM
     from func.nets import vid_enc
-    import chainer
-    from chainer import serializers
-    from chainer import configuration
+    import torch
     import argparse
+    #from chainer import serializers: モデルの保存(torch.saveで代用可能)
+    #from chainer import configuration(chainer.using_config): 検証データに対する予測値の計算
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('--dname', '-d', type=str, default='summe',
-                        help='dataset name')
-    parser.add_argument('--feat_type', '-f', type=str, default='smt_feat',
-                        help='feat_type: smt_feat or vgg')
+    parser.add_argument('--dname', '-d', type=str, default='summe', help='dataset name')
+    parser.add_argument('--feat_type', '-f', type=str, default='smt_feat', help='feat_type: smt_feat or vgg')
     args = parser.parse_args()
 
-    # settings
+    #設定
     seg_l = 5
     feat_type = args.feat_type
-
     d_name = args.dname
     dataset_root = 'data/{}/'.format(d_name)
     out_dir = 'results/{:}/{:}/'.format(d_name, feat_type)
-    print 'save to: ', out_dir
+    print('resultの保存先:', out_dir)
 
+    #保存先が存在しない場合
     if not os.path.exists(out_dir):
         os.makedirs(out_dir)
-
+    
     dataset = json.load(open(dataset_root + 'dataset.json'))
     video_id = [d['videoID'] for d in dataset]
 
-    # load embedding model
+    #embeddingしたモデルの読み込み
     if feat_type == 'smt_feat':
         model = vid_enc.Model()
-        serializers.load_npz('data/trained_model/model_par', model)
+        torch.load_npz('./data/trained_model/model_par', model)
     elif feat_type == 'vgg':
-        from func.nets.Seg_vgg19 import Model
+        from func.nets.Seg_vgg_19 import Model
         model = Model()
     else:
-        raise RuntimeError('[invalid feat_type] use smt_feat or vgg')
+        raise RunTimeError('[invalid feat_type] use smt_feat or vgg')
 
-    for v_id in video_id:
+    for v__id in video_id:
 
-        with configuration.using_config('train', False):
-            with chainer.no_backprop_mode():
-                vsum = VSUM(v_id, model, dataset=d_name, seg_l=seg_l)
+        with torch.no_grad:
+            vsum = VSUM(v_id, model, dataset=d_name, seg_l=seg_l)
 
-        _, frames, _ = vsum.summarizeRep(seg_l=seg_l, weights=[1.0, 0.0])
+        _, frames = vsum.summarizeRep(seg_l=seg_l, weights=[1.0, 0.0])
 
-        # get 0/1 label for each frame
+        #0か1のラベルを各フレームに付与
         fps = vsum.dataset.data['fps']
         fnum = vsum.dataset.data['fnum']
         label = get_flabel(frames, fnum, fps, seg_l)
