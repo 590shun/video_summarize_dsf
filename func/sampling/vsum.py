@@ -6,7 +6,9 @@ import gm_submodular.example_objectives as ex
 from gm_submodular import leskovec_maximize
 from func.dataset.summe import SUMME
 import numpy as np
+import torch
 import scipy.spatial.distance as dist
+import functools
 
 #クラス定義#
 class VSUM(gm_submodular.DataElement):
@@ -36,7 +38,7 @@ class VSUM(gm_submodular.DataElement):
         self.frame, img_id, self.score = self.dataset.sampleFrame()
 
         fno_arr = np.expand_dims(np.array(img_id), axis=1)
-        self.dist_c = dist.pdist(fno_arr, 'sqeulidean')
+        self.dist_c = dist.pdist(fno_arr, 'sqeuclidean')
     
     def getCosts(self):
         return np.ones(self.x.shape[0])
@@ -51,10 +53,10 @@ class VSUM(gm_submodular.DataElement):
     def getDistances(self):
         return np.multiply(self.dist_e, self.dist_e)
     
-    def summarizeRep(self, weight=[1.0, 0.0], seg_l=5):
+    def summarizeRep(self, weights=[1.0, 0.0], seg_l=5):
         objectives = [representativeness(self), uniformity(self)]
 
-        selected, score, minoux_bound = leskovec_maximize(self, weights, objcetives, budget=self.budget)
+        selected, score, minoux_bound = leskovec_maximize(self, weights, objectives, budget=self.budget)
         selected.sort()
 
         frames = []
@@ -66,10 +68,12 @@ class VSUM(gm_submodular.DataElement):
 
 def encodeSeg(data, model, seg_size=5):
     feat = data.feat
+    feat = torch.from_numpy(feat)
 
     img, img_id, score = data.sampleFrame()
     segs = [img_id[i:i + seg_size] for i in range(len(img_id) - seg_size + 1)]
-    segs = reduce(lambda x, y: x + y, segs)
+    #segsの要素の総和
+    segs = functools.reduce(lambda x, Y: x + Y, segs)
 
     x = feat[segs]
 
@@ -82,8 +86,8 @@ def encodeSeg(data, model, seg_size=5):
 def uniformity(S):
     #入力:S(getChrDistance()のデータ要素)#
     #return: uniformity objective#
-
-    tempDMat.mean()
+    tempDMat = S.getChrDistances()
+    norm = tempDMat.mean()
     return (lambda X: (1 - ex.kmedoid_loss(X, tempDMat, float(norm))))
     
 def representativeness(S):
