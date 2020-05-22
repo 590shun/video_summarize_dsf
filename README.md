@@ -1,27 +1,13 @@
 # vsum_dsf
-The implementation of the paper "Video Summarization using Deep Semantic Features" in ACCV'16 [[arXiv](arxiv.org/abs/1609.08758)]
+これは"Video Summarization using Deep Semantic Features" in ACCV'16 [[arXiv](arxiv.org/abs/1609.08758)]でのを書き直したものになります。詳しくは[[こちら](http://github.com/mayu-ot/vsum_dsf)]
 
-## How to set it up
+## 実験手順
 
-	git clone https://github.com/mayu-ot/vsum_dsf.git
+	git clone https://github.com/590shun/vsum_dsf.git
 
-### Install dependency
-
-You can install required python packages using conda:
-
-	conda env create -f vsum_dsf/environment.yml
-	
-Requirements:
-- numpy=1.11
-- scipy
-- scikit learn
-- chainer=2.0
-
-Optional:
-- scikit video ( for exporting video )
-
-This code utilizes tools provided by M. Gygli *et al.* [1].
-You can set it up by:
+### オプション
+このコードでは以下のM. Gygli *et al.* [1]を参考にしています。
+環境構築は次のように行います。
 
 	cd vsum_dsf
 	git clone https://github.com/gyglim/gm_submodular.git
@@ -30,21 +16,18 @@ You can set it up by:
 
 [1] Gygli, Grabner & Van Gool. Video Summarization by Learning Submodular Mixtures of Objectives. CVPR 2015.
 
-### Download dataset and model parameters
+### データセットのダウンロードとモデルの使用について
 
-To test the model in the paper, download a `data.zip` [**HERE**](https://www.dropbox.com/s/zxp8dq18t0tqlk2/data.zip?dl=0) and extract it in the folder `vsum_dsf`.
-
-The demo performs video summarization on the SumMe dataset ([project page](https://people.ee.ethz.ch/~gyglim/vsum/index.php)).
-
-You can download the dataset as: 
+この実験で使うデータ(SumMeデータセット)は `data.zip` [**HERE**](https://www.dropbox.com/s/zxp8dq18t0tqlk2/data.zip?dl=0)として保管してあります。
+データセットについては([こちら](https://people.ee.ethz.ch/~gyglim/vsum/index.php))を参照してください。  
+以下のようにしてデータを解凍してください。  
 
 	cd data/summe
 	wget https://data.vision.ee.ethz.ch/cvl/SumMe/SumMe.zip
 	unzip SumMe.zip
 
-## Example
-
-See the [notebook](https://github.com/mayu-ot/vsum_dsf/blob/master/Demo.ipynb) or:
+## 実験
+以下の通りに実行してください。
 
 	python script/summarize.py
 	python script/evaluate.py results/summe/smt_feat
