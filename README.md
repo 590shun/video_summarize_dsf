@@ -1,4 +1,4 @@
-# vsum_dsf
+# Video Summarization using Deep Semantic Features
 これは"Video Summarization using Deep Semantic Features" in ACCV'16 [[arXiv](arxiv.org/abs/1609.08758)]でのを書き直したものになります。詳しくは[[こちら](http://github.com/mayu-ot/vsum_dsf)]
 
 ## 実験手順
