@@ -19,7 +19,7 @@
 
 ### データセットのダウンロードとモデルの使用について
 
-この実験で使うデータ(SumMeデータセット)は `data.zip` [**HERE**](https://www.dropbox.com/s/zxp8dq18t0tqlk2/data.zip?dl=0)として保管。
+この実験で使うデータ(SumMeデータセット)は [**data.zip**](https://www.dropbox.com/s/zxp8dq18t0tqlk2/data.zip?dl=0)として保管。
 データセットについては([こちら](https://people.ee.ethz.ch/~gyglim/vsum/index.php))を参照。  
  
 
